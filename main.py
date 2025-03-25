@@ -4,7 +4,7 @@ import numpy as np
 import argparse
 
 class Node:
-    def __init__(self, x, y):
+    def __init__(self, x, y, energy):
         """
         初始化节点对象。
 
@@ -17,7 +17,7 @@ class Node:
         self.cluster_head = False  # 是否是簇头（当前轮次）
         self.cluster_id = None     # 簇头 ID
         self.eligible = True       # 是否有资格成为簇头（一整轮）
-        self.energy = 0.5  # 初始能量（焦耳）
+        self.energy = energy  # 初始能量（焦耳）
         self.dead = False   # 死亡状态标识
 
 
@@ -37,10 +37,7 @@ def generate_nodes(num_nodes, area_width, area_height):
     for _ in range(num_nodes):
         x = random.uniform(0, area_width)  # 在 [0, area_width] 范围内随机生成 x 坐标
         y = random.uniform(0, area_height)  # 在 [0, area_height] 范围内随机生成 y 坐标
-        # 初始化节点能量
-        node = Node(x, y)
-        node.energy = 0.5  # 0.5焦耳初始能量
-        nodes.append(node)  # 将坐标作为元组添加到列表中
+        nodes.append(Node(x, y, 0.5))  # 初始化节点 添加到列表中
     return nodes
 
 
@@ -361,7 +358,7 @@ if __name__ == "__main__":
         # 进行簇头选举
         cluster_heads = cluster_head_election(alive_nodes, current_num_cluster_heads, r)
 
-        # 将结点加入对应簇头
+        # 将节点加入对应簇头
         for node in alive_nodes:
             nearest_cluster_head = calculate_nearest_cluster_head(node, cluster_heads)
             node.cluster_id = nearest_cluster_head.cluster_id
