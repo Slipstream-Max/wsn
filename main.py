@@ -365,7 +365,7 @@ if __name__ == "__main__":
     num_cluster_heads = int(len(nodes) * cluster_head_percentage)
 
     # 打印参数信息
-    print(f"模拟参数:")
+    print(f"模拟参数:")  # noqa: F541
     print(f"节点数量: {num_nodes}")
     print(f"区域大小: {area_width}x{area_height}")
     print(f"簇头比例: {cluster_head_percentage}")
