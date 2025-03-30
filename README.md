@@ -1,5 +1,6 @@
 # 无线传感器网络分簇模拟系统
 
+## 广东工业大学智能系统作业
 这是一个基于LEACH (Low-Energy Adaptive Clustering Hierarchy) 协议的无线传感器网络 (WSN) 分簇模拟系统。该系统通过Python实现，可视化展示了LEACH协议在无线传感器网络中的工作过程。
 
 ## 技术背景
