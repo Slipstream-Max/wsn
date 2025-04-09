@@ -1,5 +1,5 @@
-# 无线传感器网络分簇模拟系统
-
+# 无线传感器网络分簇模拟
+![wsn.jpg](./pic/round_10.png)
 ## 广东工业大学智能系统作业
 这是一个基于LEACH (Low-Energy Adaptive Clustering Hierarchy) 协议的无线传感器网络 (WSN) 分簇模拟系统。该系统通过Python实现，可视化展示了LEACH协议在无线传感器网络中的工作过程。
 
@@ -85,6 +85,15 @@ python main.py
 ```bash
 python main.py --nodes 50 --width 100 --height 100 --cluster-percentage 0.05 --rounds 200
 ```
+### 图片保存
+
+使用`--save`参数可以将每轮的拓扑图保存到指定目录：
+
+```bash
+python main.py --save ./simulation_images
+```
+
+保存的图片命名格式为`round_1.png`, `round_2.png`等，对应每轮的拓扑状态。
 
 ### 命令行参数
 
@@ -95,6 +104,8 @@ python main.py --nodes 50 --width 100 --height 100 --cluster-percentage 0.05 --r
 | `--height` | 模拟区域高度 | 100 |
 | `--cluster-percentage` | 簇头比例 | 0.05 |
 | `--rounds` | 模拟总轮次 | 10 |
+| `--save` | 保存每轮图片到指定目录 | 无 |
+
 
 ## 输出与可视化
 
@@ -133,10 +144,10 @@ python main.py --nodes 50 --width 100 --height 100 --cluster-percentage 0.05 --r
 ### 50节点网络生命周期分析
 
 ```bash
-python main.py --nodes 50 --rounds 200 --cluster-percentage 0.05
+python main.py --nodes 50 --rounds 200 --cluster-percentage 0.05 --save ./pics
 ```
 
-该命令将模拟50个节点组成的网络，运行200轮，并使用5%的簇头比例。通过观察不同轮次的节点死亡情况，可以分析网络的生命周期特性。
+该命令将模拟50个节点组成的网络，运行200轮，并使用5%的簇头比例,将图片最后保存在./pics文件夹下。通过观察不同轮次的节点死亡情况，可以分析网络的生命周期特性。
 
 ## 扩展方向
 

@@ -42,7 +42,7 @@ def generate_nodes(num_nodes, area_width, area_height):
     return nodes
 
 
-def draw_nodes(nodes, cluster_heads, round_num):
+def draw_nodes(nodes, cluster_heads, round_num, save_dir=None):
     """
     绘制节点的坐标，并将同一聚类的节点用相同颜色表示，同时连线到簇头。
     死亡节点用灰色叉叉表示。
@@ -51,6 +51,7 @@ def draw_nodes(nodes, cluster_heads, round_num):
     nodes (list): 包含 Node 对象的列表。
     cluster_heads (list): 包含簇头节点的列表。
     round_num (int): 当前轮次
+    save_dir (str): 可选，保存图片的目录路径
     """
     # 定义颜色列表
     colors = plt.cm.tab10.colors  # 使用 matplotlib 的 tab10 颜色映射
@@ -168,6 +169,14 @@ def draw_nodes(nodes, cluster_heads, round_num):
     plt.legend(by_label.values(), by_label.keys(), loc="upper right")
 
     plt.grid(True, linestyle="--", alpha=0.7)
+    
+    if save_dir:
+        import os
+        os.makedirs(save_dir, exist_ok=True)
+        filename = os.path.join(save_dir, f"round_{round_num}.png")
+        plt.savefig(filename)
+        print(f"Saved round {round_num} image to {filename}")
+    
     plt.show()
 
 
@@ -289,7 +298,7 @@ def simulate_data_transmission(nodes, cluster_heads, base_station, round_num):
     base_station: 基站节点
     round_num: 当前轮次
     """
-    print(f"\n=== 第 {round_num} 轮数据传输开始 ===")
+    print(f"=== 第 {round_num} 轮数据传输开始 ===")
 
     # 调整后的能耗参数（提高能耗）
     E_elec = 100e-9  # 提高电路能耗到100nJ/bit (原50)
@@ -349,6 +358,7 @@ if __name__ == "__main__":
         "--cluster-percentage", type=float, default=0.05, help="簇头比例 (默认: 0.05)"
     )
     parser.add_argument("--rounds", type=int, default=10, help="总轮次 (默认: 10)")
+    parser.add_argument("--save", type=str, help="保存每轮图片到指定目录")
 
     # 解析命令行参数
     args = parser.parse_args()
@@ -376,13 +386,14 @@ if __name__ == "__main__":
     print("生成的节点坐标：")
     for idx, node in enumerate(nodes):
         print(f"节点 {idx + 1}: {node.x}, {node.y}")
+    print("\n")
 
     # 添加基站（位于区域中心）
     base_station = Node(area_width / 2, area_height / 2, None) # 不计入能量
     base_station.dead = False  # 基站不会死亡
 
     # 模拟轮数
-    for r in range(total_round):
+    for r in range(1,total_round+1):
         alive_nodes = [n for n in nodes if not n.dead]
         previous_alive_count = len(alive_nodes)  # 记录本轮开始前的存活节点数
 
@@ -414,7 +425,7 @@ if __name__ == "__main__":
             current_alive_count < previous_alive_count or r % 10 == 0
         ):  # 每10轮或有节点死亡时绘图
             print(f"生成第 {r} 轮可视化...")
-            draw_nodes(nodes, cluster_heads, r)  # 传入当前轮次
+            draw_nodes(nodes, cluster_heads, r, args.save)  # 传入当前轮次和保存目录
         else:
             print(f"第 {r} 轮跳过绘图")
 
@@ -432,7 +443,7 @@ if __name__ == "__main__":
         print(f"存活节点数: {alive_count}/{num_nodes}")
         if alive_count > 0:
             print(
-                f"平均剩余能量: {sum(n.energy for n in nodes if not n.dead) / alive_count:.2e} J"
+                f"平均剩余能量: {sum(n.energy for n in nodes if not n.dead) / alive_count:.2e} J\n"
             )
         else:
-            print("所有节点已死亡，无法计算平均能量")
+            print("所有节点已死亡，无法计算平均能量\n")
