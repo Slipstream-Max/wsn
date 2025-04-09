@@ -378,7 +378,7 @@ if __name__ == "__main__":
         print(f"节点 {idx + 1}: {node.x}, {node.y}")
 
     # 添加基站（位于区域中心）
-    base_station = Node(area_width / 2, area_height / 2, None)
+    base_station = Node(area_width / 2, area_height / 2, None) # 不计入能量
     base_station.dead = False  # 基站不会死亡
 
     # 模拟轮数
